@@ -1,6 +1,6 @@
 from requests import get
 from time import sleep
-import random
+from random import randint
 from bs4 import BeautifulSoup
 
 link = input("Enter the link to your local craigslist: ")
@@ -22,11 +22,13 @@ for post in posts: # Looping through each post on a page
   
   post_titles.append(post_text.lower())
 
+sleep(randint(1,8)) #Random sleep to be gentle to server
+
 item_count = 120
 
 while item_count <= 2880: #Stops the program on the last page of the for sale section
   page_link = link + '?s=' + str(item_count) #Updating link
-
+  
   response_two = get(page_link)
   html_soup = BeautifulSoup(response_two.text, 'html.parser')
 
@@ -40,22 +42,17 @@ while item_count <= 2880: #Stops the program on the last page of the for sale se
 
   item_count += 120  #Increment by 120 to go to next page 
 
+print("DISCLAIMER: You may need to try multiple phrases to find a matching answer, if"
+      "the first does not return any solid results, change your word order and/or words")
+
 print("Try searching for these items: ") 
 
 title_words = []
-possibles = []
-
-count = 0
 
 for title in post_titles: #Checking if any item matches the given description
   for word in stolen_good:
     if word in title:
       match = title
-      count += 1
-      print("We have a match for your item! Try searching: '" + match + "'")
-
-print(count)
+      print(match)
 # To continue we need to find which item matches and then return that to the user
 # Ideally we would like to pull the exact link for the item and display it
-
-print(len(post_titles))
